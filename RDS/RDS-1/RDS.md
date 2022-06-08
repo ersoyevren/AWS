@@ -122,3 +122,30 @@ Show that when you select `production` instead of `Free Tier Template` it charge
 
 - Show action button (restore,take snapshots, etc.)
 
+## Part 2 - Configuring MySQL Workbench to connect to the RDS Instance
+
+- First, go to the Amazon RDS Service, select `Database` section from the left-hand menu, click databases and select `RDS-mysql`. Then, copy the `endpoint` at the bottom of the page.
+
+- Open the MySQL Workbench and click `+` to configure a new MySQL connection.
+
+On the page opened, we'll set up a new connection:
+
+```text
+1. Connection Name   : first connection.
+
+2. Host Name         : Paste the endpoint of the database that you have copied 
+                       and leave the port as is, 3306
+
+3. Username          : Here we enter the user name that we determined while creating the DB instance.
+                       So we enter "admin" as a username.
+
+4. Password          : Click the `Store in Keychain/Vault` and enter the password 
+                       that you determined as "Pl123456789" while creating the DB Instance.
+
+5. Test Connection   : Before you connect DB Instance, test the connection whether it works properly.
+                       So, click `Test Connection` tab.
+
+6. If the connection is set properly, you'll see the successfully message
+
+7. Then click `OK` to complete the configuration
+```
