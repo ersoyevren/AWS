@@ -149,3 +149,85 @@ On the page opened, we'll set up a new connection:
 
 7. Then click `OK` to complete the configuration
 ```
+## Part 3 - Manipulating RDS Instance
+
+- Show `clarusway` database that is created together with RDS DB instance creation.
+
+- Create a new database from "Schema" tab
+
+- To modify the database, first, we need to create a new table. So, click the `clarusway` schema (or your schema's name). Right-click the `Table` option, then select the `Create Table`, and enter `Personal_Info_1` as table name.
+
+```text
+1. First Row: Type `ID_number` into the first line. 
+              ID number is an integer, so the system automatically assign Integer value to the Datatype column.
+              Explain the Primary Key, choose the ID_number as a Primary Key, and check the PK box.
+
+3. Second Row: type Name into the second row.VARCHAR(45)
+
+4. Third Row: type Surname into the third row.VARCHAR(45)
+
+5. Fourth Row: type Gender into the fourth row.VARCHAR(45)
+
+6. Fifth Row : type Salary into the fifth row.VARCHAR(45)
+
+After that click `Apply` at the bottom of the row.
+
+Then a window that shows the review of the table pops up on the screen. Click Apply, if it's OK.
+```
+- Add another table via SQL command:
+
+```sql
+CREATE TABLE `clarusway`.`Personal_Info_2` (
+  `ID_number` INT NOT NULL,
+  `Name` VARCHAR(45) NULL,
+  `Surname` VARCHAR(45) NULL,
+  `Gender` VARCHAR(45) NULL,
+  `Age` INT NULL,
+  `Department` VARCHAR(45) NULL,
+  PRIMARY KEY (`ID_number`));
+```
+
+- Then refresh the "Table" tab to see newly created tables 
+
+- Add data to the "Personal_Info" table as shown below:
+
+```sql
+INSERT INTO clarusway.Personal_Info_1
+(ID_number, Name, Surname, Gender, Salary)
+VALUES
+('1234','Osvaldo','Clarusway','Male','40000'), 
+('56789','Guile','Clarusway','Male','50000'), 
+('007','Charlie','Clarusway','Male','45000'), 
+('432','Marcus','Clarusway','Male','50000'), 
+('324','Vincenzo','Clarusway','Male','60000'), 
+('43546','Serdar','Clarusway','Male','65000');
+```
+
+- Write a query to show all data in the `Personal_Info_1` table
+
+```sql
+SELECT * FROM clarusway.Personal_Info_1;
+```
+
+- Write a query to show the personal whose salary are higher than 40K in the `Personal_Info_1` table
+
+```sql
+ SELECT * FROM clarusway.Personal_Info_1 WHERE salary > 40000;
+```
+
+
+
+
+- Try to delete RDS and show that RDS instance can not be deleted because of the `Deletion Protection`.
+
+- Modify DB instance for "Disabling Deletion Protection"
+
+- Try to delete RDS and show that RDS instance again.
+
+   -Show that "Create final snapshot?" option should be "Unchecked"
+       
+              "I acknowledge...." flag is "Checked"
+
+ - Type "delete me" nad Click "Delete".
+
+ - Show that Automated Backups are deleted also.
