@@ -292,3 +292,21 @@ EXIT;
 
      -enter the time: 12:14:45
 
+## Part 2 - Taking a Snapshot from RDS DB Instance
+
+- Take a manual snapshot of RDS instance and name it as `manual-snapshot-RDS-mysql`.
+
+  - Go to Amazon RDS from AWS Console.
+
+  - Select `RDS-mysql` database ---> Action -----> Take Snapshot
+
+  - Settings:
+
+  ```text
+
+  DB Instance: RDS-mysql
+  Snapshot name : Manual-Snapshot-RDS-Mysql
+  ```
+  - Create
+  
+
