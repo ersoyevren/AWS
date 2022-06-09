@@ -497,3 +497,36 @@ mysql -h [DNS Name of point in time recovery RDS Instance] -u admin -p clarusway
 ```sql
 SELECT * FROM employees ORDER BY salary ASC;
 ```
+## Part 5 - Dumping and Migrating Database
+
+- Show that some information are absent in the `clarusway` database on RDS DB instance (`RDS-Mysql`). We need to recover absent data from snapshot via dumping.
+
+- Go to MariaDB Client instance by connecting with SSH.
+
+- Back up the `clarusway` db from RDS DB instance (`restored-from-point-in-time-RDS`) to the file named `backup.sql` on EC2 instance.
+
+```bash
+mysqldump -h [restored-from-point-in-time-RDS endpoint] -u admin -p clarusway > backup.sql
+```
+
+- Show `backup.sql` file with `ls` command.
+
+- Restore the backup of `clarusway` db on to the MySQL DB Server (`RDS-mysql` instance) using  `backup.sql` file
+
+```bash
+mysql -h [RDS-mysql endpoint] -u admin -p clarusway < backup.sql
+```
+
+- Connect to the `RDS-mysql` instance.
+
+```bash
+mysql -h [RDS-mysql endpoint] -u admin -p;
+```
+
+- Show that all records are replicated in the `clarusway` database.
+
+```sql
+SHOW DATABASES;
+USE clarusway;
+SELECT * FROM employees;
+```
