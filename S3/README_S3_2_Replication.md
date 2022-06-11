@@ -167,3 +167,77 @@ PS: Please, do not forget to select "US East (Ohio)" as Region
     ]
 }
 ```
+## Part 3 - Creating IAM Role for Bucket Replication
+
+- Go to `IAM Service` on AWS management console.
+
+- Click `Policy` on left-hand menu and select `create policy`.
+
+- Select `JSON` option and paste the policy seen below.
+
+```json
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Action": [
+                "s3:Get*", 
+                "s3:ListBucket"
+            ],
+            "Effect": "Allow",
+            "Resource": [
+                "arn:aws:s3:::source.replica.clarusway(change me)",
+                "arn:aws:s3:::source.replica.clarusway(change me)/*"
+            ]
+        },
+        {
+            "Action": [ 
+                "s3:ReplicateObject", 
+                "s3:ReplicateDelete",
+                "s3:ReplicateTags",
+                "s3:GetObjectVersionTagging"
+            ],
+            "Effect": "Allow",
+            "Resource": "arn:aws:s3:::destination.cross.region.replica.clarusway(change me)/*"
+        }
+    ]
+}
+```
+
+- Enter the followings as policy name and description.
+
+```text
+Name            : yourname.cross.replication.iam.policy
+
+Description     : yourname.cross.replication.iam.policy
+```
+
+- Click `create policy`.
+
+- Go to `Roles` on the left hand menu and click `create role`.
+
+```text
+Type of Trusted Entity      : AWS Service
+Use Case                    : S3
+```
+
+- Click next.
+
+- Enter `yourname.cross.replication.iam.policy` in filter policies box and select the policy
+
+- Click Next `Tag`
+
+```text
+Keep it as default
+```
+
+- Click Next:Review
+
+- Enter the followings as role name and description an review
+
+```text
+Role Name           : yourname.cross.replication.iam.role
+Role Description    : yourname.cross.replication.iam.role
+```
+
+- Click `create role`.
