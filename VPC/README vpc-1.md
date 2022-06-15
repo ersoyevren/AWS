@@ -81,3 +81,45 @@ STEP 3 : Configuring Route Table
 
 - explain routes in the clarus-default-rt
 
+STEP 4: Create Subnets
+- Go to the Subnets from left hand menu
+- Push create subnet button
+
+1. 
+Name tag          :clarus-az1a-public-subnet
+VPC               :clarus-vpc-a
+Availability Zone :us-east-1a
+IPv4 CIDR block   :10.7.1.0/24
+
+2. 
+Name tag          :clarus-az1a-private-subnet
+VPC               :clarus-vpc-a
+Availability Zone :us-east-1a
+IPv4 CIDR block   :10.7.2.0/24
+
+3. 
+Name tag          :clarus-az1b-public-subnet
+VPC               :clarus-vpc-a
+Availability Zone :us-east-1b
+IPv4 CIDR block   :10.7.4.0/24
+
+4. 
+Name tag          :clarus-az1b-private-subnet
+VPC               :clarus-vpc-a
+Availability Zone :us-east-1b
+IPv4 CIDR block   :10.7.5.0/24
+
+5. 
+Name tag          :clarus-az1c-public-subnet
+VPC               :clarus-vpc-a
+Availability Zone :us-east-1c
+IPv4 CIDR block   :10.7.7.0/24
+
+6. 
+Name tag          :clarus-az1c-private-subnet
+VPC               :clarus-vpc-a
+Availability Zone :us-east-1c
+IPv4 CIDR block   :10.7.8.0/24
+
+- explain the subnet descriptions and reserved ips (why 251 instead of 256)
+
