@@ -137,3 +137,46 @@ Target ----> Nat Gateway ----> clarus-nat-gateway
 - Go to VPC console on left hand menu and select Elastic IP tab
 
 - Select "First Elastic IP" ----> Actions ----> Release Elastic IP Address ----> Release 
+
+
+### Part 4 - Creating NAT Instance
+
+STEP 1: Create NAT Instance
+
+- Go to EC2 Menu Using AWS Console
+
+```text
+AMI             : ami-00a36856283d67c39 (Nat Instance)
+Instance Type   : t2.micro
+Network         : clarus-vpc-a
+Subnet          : clarus-az1a-public-subnet
+Security Group  : 
+    Sec.Group Name : Public Sec.group
+    Rules          : TCP ---> 22 ---> Anywhere
+                   : All ICMP IPv4  ---> Anywhere
+
+Tag             :
+    Key         : Name
+    Value       : Clarus NAT Instance
+```
+
+- Select created Nat Instance on EC2 list
+
+- Tab Actions Menu ----> Networking ----> Enable Source/Destination Check ---> Yes, Disable
+
+- Explain why we need to implement this process mentioned above
+
+STEP 2: Configuring the Route Table
+
+- Go to Route Table and select "clarus-private-rt"
+
+- Select Routes sub-menu ----> Edit Rules ----> Delete blackhole for Nat Gateway
+
+- Add Route
+```
+Destination     : 0.0.0.0/0
+Target ----> Instance ----> Nat Instance
+```
+
+- Connect to private Instance via bastion host and ping www.google.com to show response.
+
