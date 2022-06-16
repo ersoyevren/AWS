@@ -80,3 +80,60 @@ ssh ec2-user@[Your private EC2 private IP]
 ```
 - Show connection of the private EC2 over the Bastion Host
 
+### Part 3 - Creating NAT Gateway
+
+-  discuss about how to connect to internet from the Private EC2 in private subnet 
+
+Step 1 : Create Elastic IP
+
+- Go to VPC console on left hand menu and select Elastic IP tab
+
+- Tab Allocate Elastic IP address
+
+Elastic IP address settings
+
+```text
+Network border Group : Keep it as is (us-east-1)
+
+Amazon's pool of IPv4 addresses
+```
+- Click Allocate button and name it as "First Elastic IP"
+
+- create a NAT Gateway in the public subnet
+
+STEP 2: Create Nat Gateway
+
+- Go to VPC console on left hand menu and select Nat Gateway tab
+
+- Click Create Nat Gateway button 
+```bash
+Name                      : clarus-nat-gateway
+
+Subnet                    : clarus-az1b-public-subnet
+
+Elastic IP allocation ID  : First Elastic IP
+```
+- click "create Nat Gateway" button
+
+STEP 3 : Modify Route Table of Private Instance's Subnet
+
+- Go to VPC console on left hand menu and select Route Table tab
+
+- Select "clarus-private-rt" ---> Routes ----> Edit Rule ---> Add Route
+```
+Destination     : 0.0.0.0/0
+Target ----> Nat Gateway ----> clarus-nat-gateway
+```
+- click save routes
+
+- go to private instance via terminal using bastion host
+
+- try to ping www.google.com and show response.
+
+- Go to VPC console on left hand menu and select Nat Gateway tab
+
+- Select clarus-nat-gateway --- > Actions ---> delete Nat Gateway
+
+- Go to VPC console on left hand menu and select Elastic IP tab
+
+- Select "First Elastic IP" ----> Actions ----> Release Elastic IP Address ----> Release 
