@@ -99,3 +99,37 @@ Tag             :
 - It is not able to connect to the website 
 
 
+## STEP 2: Setting up Peering
+
+
+- Go to 'Peering connections' menu on the left hand side pane of VPC
+
+- Push "Create Peering Connection" button
+
+```text
+Peering connection name tag : First Peering
+VPC(Requester)              : Default VPC
+Account                     : My Account
+Region                      : This Region (us-east-1)
+VPC (Accepter)              : clarus-vpc-a
+```
+- Hit "Create peering connection" button
+
+- Select 'First Peering' ----> Action ---> Accept Request ----> Accept Request
+
+- Go to route Tables and select default VPC's route table ----> Routes ----> Edit routes
+```
+Destination: paste "clarus-vpc-a" CIDR blok
+Target ---> peering connection ---> select 'First Peering' ---> Save routes
+```
+
+- select clarus-private-rt's route table ----> Routes ----> Edit routes
+```
+Destination: paste "default VPC" CIDR blok
+Target ---> peering connection ---> select 'First Peering' ---> Save routes
+```
+
+- Go to windows EC2 named 'Public-Windows', write the private IP address of the Private-Instance on browser and show the website with KEN.
+
+
+WARNING!!! ---> Please do not terminate "NAT Gateway" and "Private-Instance" for next part.
