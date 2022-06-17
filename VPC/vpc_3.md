@@ -133,3 +133,57 @@ Target ---> peering connection ---> select 'First Peering' ---> Save routes
 
 
 WARNING!!! ---> Please do not terminate "NAT Gateway" and "Private-Instance" for next part.
+
+## Part 6 - Create VPC Endpoint
+
+# STEP 1: 
+
+### A. Create S3 Bucket 
+
+- Go to the S3 service on AWS console
+- Create a bucket of `clarusway-vpc-endpoint` with following properties, 
+
+```text
+Object Ownership            : ACLs disabled
+Block all public access     : Checked
+Versioning                  : Disabled
+Server access logging       : Disabled
+Tags                        : 0 Tags
+Default encryption          : Disabled
+Object lock                 : Disabled
+
+```
+- Upload 'Honda.png' file into the S3 bucket
+
+### B. Configure Public Instance (Bastion Host)
+
+```text
+AMI             : Amazon Linux 2
+Instance Type   : t2.micro
+Network         : clarus-vpc-a
+Subnet          : clarus-az1b-public-subnet
+Security Group    : 
+    Sec.Group Name : PublicSG
+    Rules          : SSH --- > 22 ---> Anywhere
+Tag             :
+    Key         : Name
+    Value       : Public-Instance (Bastion Host)
+```
+
+### C. Create IAM role to reach S3 from "Private-Instance"
+
+- Go to IAM Service from AWS console and select roles on left hand pane
+
+- click create role
+```
+Trusted entity type: AWS Service
+use case : EC2  
+Use cases for other AWS services: s3 ---> Next : Permission
+Permissions Policies: AmazonS3FullAccess ---> Next
+Role Name : clarusS3FullAccessforEndpoint
+Role description: clarus S3 Full Access for Endpoint
+click create button
+```
+Go to EC2 service from AWS console
+
+Select "Private-Instance" ---> Actions ---> Security ---> Modify IAM Role  select newly created IAM role named 'clarusS3FullAccessforEndpoint' ---> Apply
