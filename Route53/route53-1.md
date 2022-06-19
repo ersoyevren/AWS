@@ -259,3 +259,78 @@ Outputs:
 ```
 
 
+## Part 2 - Getting familiar with Route 53 Public Hosted Zone, SOA, NS. 
+Explain that Public hosted Zone and permanent records SOA nad NS. 
+             you may also transfer the SOA ans NS records
+             you may also create Private Hosted zone. 
+
+## Part 3 - Creating A Record Sets 
+
+### STEP 1 : Create A Record with "www" subdomain:
+
+- Go to Route 53 service
+
+- Click hosted zones on the left hand menu
+
+- click your Domain name's public hosted zone
+
+- click "create record"
+
+- select "simple routing" ---> Next
+
+- click "Define simple record"
+
+- Create A record with N. Virginia_1
+```bash
+Record Name:"www"
+Value/Route traffic to: 
+  - select "IP address or another value depending the record type" option 
+      - enter IP of the "N.Virginia_1" EC2
+Record Type : A
+Type: "A – IPv4 address"
+Alias:"No"
+TTL:"1m"
+```
+- Select newly created record's flag and hit the "create record" tab seen bottom
+
+### STEP 2 : Create another "A record" with N. Virginia_1 with "info" subdomain
+
+- Go to Route 53 service
+
+- Click hosted zones on the left hand menu
+
+- click your Domain name's public hosted zone
+
+- click "create record"
+
+- select "simple routing" ---> Next
+
+- click "Define simple record"
+
+- Create A record with N. Virginia_1
+```bash
+Record Name:"info"
+Value/Route traffic to: 
+  - select "IP address or another value depending the record type" option 
+      - enter IP of the "N.Virginia_1" EC2
+Record Type : A
+TTL:"1m"
+```
+- Select newly created record's flag and hit the "create record" 
+tab seen bottom
+
+- After show "info.[your DNS name].net" on the browser, "Delete" this record 
+
+
+### STEP 3: Add another IP (N. Virginia_2)  to the existing "A record" 
+
+- select "www.[your DNS name].net" A-record ---> Edit
+```bash
+Name:"www"
+Value/Route traffic to:
+    "IP of N.Virginia_1" ,and 
+    "IP of N.Virginia_2"
+```
+
+- Check from local terminal
+nslookup www.[your DNS name].net an show two IP address 
