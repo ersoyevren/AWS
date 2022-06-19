@@ -334,3 +334,97 @@ Value/Route traffic to:
 
 - Check from local terminal
 nslookup www.[your DNS name].net an show two IP address 
+
+## Part 4 - Creating a CNAME Record:
+
+- Add CNAME record for "Domain Name" 
+
+- click your Domain name's public hosted zone
+
+- click "create record"
+
+- select "simple routing" ---> Next
+
+- click "Define simple record"
+
+```bash
+Record Name:"showcname"
+Value/Route traffic to: 
+  - "IP address or another value depending on the record type"
+    - enter "www.[your DNS name].net"
+Record Type : "CNAME"-Routes to another domain and some AWS resources
+TTL:"1m"
+```
+- hit the define simple record
+
+- Select newly created record's flag and hit the "create record" 
+tab seen bottom
+
+- After show "showcname.[your DNS name].net" on the browser. It will reflects the "www.[your DNS name].net". After that "Delete"  this record 
+
+## Part 5 - Creating a Alias Record:
+
+### STEP 1: Alias for S3 bucket 
+
+- click your Domain name's public hosted zone
+
+- click "create record"
+
+- select "simple routing" ---> Next
+
+- click "Define simple record"
+
+```bash
+Record Name:"www"
+Value/Route traffic to: 
+    - Alias to *****S3 Website Endpoint*******
+    - US East (N.Virginia) [us-east-1]
+    - choose your S3 bucket named "www.[your DNS name].net"
+Record Type : A
+```
+- hit the define simple record
+
+- Select newly created record's flag and hit the "create record" 
+tab seen bottom
+
+
+- go to the target domain name "www.[your DNS name].net" on browser
+
+- show the content of web page. It is the same as  S3 static web hosting page.
+
+- ***Delete the Alias record 
+
+### STEP 2: Alias for ELB  
+
+- click your Domain name's public hosted zone
+
+- click "create record"
+
+- select "simple routing" ---> Next
+
+- click "Define simple record"
+
+```bash
+Record Name:"www"
+Value/Route traffic to: 
+    - Alias to ***** ELB Endpoint*******
+    - US East (N.Virginia) [us-east-1]
+    - choose your S3 bucket named "www.[your DNS name].net"
+Record Type : A
+```
+- hit the define simple record
+
+- Select newly created record's flag and hit the "create record" 
+tab seen bottom
+
+
+- go to the target domain name "www.[your DNS name].net" on browser
+
+- show the content of web page. It is the same as S3 static web hosting page.
+
+### STEP 3: Cleaning 
+- Delete CloudFormation Stack
+- Delete Instances.
+- Delete bucket 
+- Delete A,CNAME and Alias record If they exist. 
+- Check the load balancer again
