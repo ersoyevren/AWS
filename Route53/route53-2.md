@@ -360,3 +360,61 @@ button
 - change the IP of your computer via VPN and see the Europe page.
 
 - Send the DNS to students try for US and show them different web page based on location.
+
+## Part 4 - Creating Private Hosted Zone and DNS Records 
+
+### STEP 1: Creating Private Hosted Zone
+
+- go to the dashboard and click on "Hosted Zones"
+- Click "Create Hosted Zone"
+
+```bash
+   Domain name: the same name of your domain(clarusway.us)
+   Description: ---
+   Type       :Private hosted zone
+   VPCs to associate with the hosted zone
+     Region : N.Virginia
+     VPC ID : clarus-vpc-a
+  Tags:---
+
+```
+- Click on "create Hosted Zone"
+
+- Show that NS and SOA records automatically created. 
+
+### STEP 2: Creating in A record with "wwww" in Private Hosted Zone
+
+- Go  to "PRIVATE" Hosted Zone 
+- Create A record in "PRIVATE" Hosted Zone 
+```bash
+Record Name :"www"
+Record Type : A
+TTL:"60"
+Value/Route traffic to : 
+  - "Ip address or another value depending on the record type"
+    - enter IP IP address of "Local" 
+Routing: "Simple"
+```
+### STEP 3: Creating in A record with "wwww" in Public Hosted Zone
+
+- Go  to "PUBLIC" Hosted Zone 
+- Create A record in "PUBLIC" Hosted Zone 
+```bash
+Record Name :"www"
+Record Type : A
+TTL:"60"
+Value/Route traffic to : 
+  - "Ip address or another value depending on the record type"
+    - enter IP IP address of "N.Virginia" 
+Routing: "Simple"
+```
+- go to "Window" instance and connect it with RDP
+- open the Internet Explorer of "Window" instance 
+- type "www.clarusway.us". show which content is seen "local instance content" in VPC 
+- go to the public browser than type browser: "www.clarusway.us" than show that, N.Virginia instance is seen on public internet.
+
+### STEP 4: Cleaning 
+- Delete Instances.
+- Delete bucket 
+- Delete A recordS If they exist. 
+- Delete the HEALTH CHECK
