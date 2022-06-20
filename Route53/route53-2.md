@@ -275,3 +275,88 @@ Record ID               : Failover Scenario-secondary
 
 - go to the browser and show the web site content turned into S3 bucket content with the help of the failover record
 
+## Part 3 - Creating a Geolocation routing policies
+
+### STEP 1 :Create Geolocation record for Japan
+
+- Click create record
+
+- select "Geolocation" as a routing policy
+
+- click next
+
+```bash
+Record Name :"geo"
+Record Type : A
+TTL:"60"
+Value/Route traffic to : 
+  - "Ip address or another value depending on the record type"
+    - "IP of Geo-Japon Instance"
+Routing: "Geolocation" 
+Location               :
+  - Countries Japan
+Health check            : Keep it as is
+Record ID               : Geolocation Scenario-Japan
+```
+- click "define geolocation record" button
+
+- select created Geolocation record flag and push the "create records" button
+
+
+### STEP 2 : Create geolocation record for Europe
+
+- Click create record
+
+- select "Geolocation" as a routing policy
+
+- click next
+
+```bash
+Record Name :"geo"
+Record Type : A
+TTL:"60"
+Value/Route traffic to : 
+  - "Ip address or another value depending on the record type"
+    - "IP of Geo-Frankfurt Instance"
+Routing: "Geolocation "
+Location               :
+  - Countinent : Europe
+Health check            : Keep it as is
+Record ID               : Geolocation Scenario-Europe
+```
+- click "define geolocation record" button
+
+- select created Geolocation record flag and push the "create records" 
+button
+
+
+### STEP 3 : Create geolocation record for others
+
+- Click create record
+
+- select "Geolocation" as a routing policy
+
+- click next
+
+```bash
+Record Name :"geo"
+Record Type : A
+TTL:"60"
+Value/Route traffic to : 
+  - "Ip address or another value depending on the record type"
+    - "IP of N.Virginia"
+Routing: "Geolocation"  
+Location               : Select Default option
+Health check           : Keep it as is
+Record ID              : Geolocation Scenario-Others
+```
+- click "define geolocation record" button
+
+- select created Geolocation record flag and push the "create records" 
+button
+
+- change the IP of your computer via VPN and see the Japon page.(If you don't have VPN ask some one in other country to make request ann publish from slack)
+
+- change the IP of your computer via VPN and see the Europe page.
+
+- Send the DNS to students try for US and show them different web page based on location.
