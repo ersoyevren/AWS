@@ -160,3 +160,118 @@ Sec Group: RDP---->0.0.0.0/0
 ```
   - Properties>>> Set Static Web Site >>> Enable >>> Index document : index.html 
    
+## Part 2 - Creating a fail-over routing policies
+
+### STEP 1 : Create health check for "N. Virginia_1" instance
+
+- Go to left hand pane and click the Health check menu 
+
+- Click Health check button
+
+- Configure Health Check
+
+```bash 
+1. Name: firsthealthcheck
+
+What to monitor     : Endpoint
+
+Specify endpoint by : IP address
+
+Protocol            : HTTP
+
+IP address          : N.Virginia_1 IP address
+
+Hostname:           : -
+
+Port                : 80
+
+Path                : leave it as /
+
+Advance Configuration 
+
+Request Interval    :  Standard (30seconds)
+
+Failure Threshold   : 3
+
+Explain Response Time:
+
+Failure = Time Interval * Threshold. If its a standard 30 seconds check then three checks is actually equal to 90 seconds. So be careful of how these two different settings interact each other.
+
+String Matching     : No 
+
+Latency Graphs:     : Keep it as is
+
+Invert Health Check Status: Keep it as is
+
+Disable Health Check:
+Explain: If you disable a health check, Route 53 considers the status of the health check to always be healthy. If you configured DNS failover, Route 53 continues to route traffic to the corresponding resources. If you want to stop routing traffic to a resource, change the value of Invert health check status.
+
+Health Checker Regions: Keep it as default
+
+click Next
+
+Get Notification   : None
+
+click create and show that the status is unhealthy approximately after 90 seconds the instance healthcheck will turned into the "healthy" from "unhealthy"
+```
+### Step 2: Create A record for  "N. Virginia_1" instance IP - Primary record
+
+- Got to the hosted zone and select the public hosted zone of our domain name
+
+- Clear all teh record sets except NS and SOA
+
+- Click create record
+
+- select "Failover" as a routing policy
+
+- click next
+
+```bash
+Record Name :"www"
+Record Type : A
+TTL:"60"
+Value/Route traffic to : 
+  - "Ip address or another value depending on the record type"
+    - enter IP IP address of N.Virginia_1 
+Routing: "Failover"
+Failover record type    : Primary
+Health check            : firsthealthcheck
+Record ID               : Failover Scenario-primary
+```
+- click defined Failover record button
+
+- select created failover record flag and push the create records button
+
+### Step 3: Create A record for S3 website endpoint - Secondary record
+
+- Click create record
+
+- select "Failover" as a routing policy
+
+- click next
+
+```bash
+Record Name :"www"
+Record Type : A
+TTL:"60"
+Value/Route traffic to : 
+  - "Alias to S3 website endpoint"
+  - N.Virginia(us-east-1)
+  - Choose your S3 bucket named "www.[your sub-domain name].net"
+Routing: "Failover" 
+Failover record type    : Secondary
+Health check            : keep it as is
+Record ID               : Failover Scenario-secondary
+```
+- click define Failover record button
+
+- select created failover record flag and push the create records button
+
+- Go to browser and show the web page with N.Virginia_1 instance content 
+
+- Stop the N.Virginia_1 instance
+
+- check the healtcheck status and wait until it appears as unhealthy
+
+- go to the browser and show the web site content turned into S3 bucket content with the help of the failover record
+
