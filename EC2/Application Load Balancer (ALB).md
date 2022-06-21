@@ -49,3 +49,116 @@ Tag:
 
 - Click "Create Security Group" button.
 
+## Part 2 - Launch Two Instance Using the Launch Template
+
+### Step 1 - Launch Template Configuration
+
+- Launch Template Name
+
+```text
+Launch template name            : MyTemplate
+Template version description    : MyTemplate
+```
+
+- Amazon Machine Image (AMI)
+
+```text
+Amazon Linux 2 AMI (HVM), SSD Volume Type, ami-0022f774911c1d690 (us-east-1)
+```
+
+- Instance Type
+
+```text
+t2.micro
+```
+
+- Key Pair
+
+```text
+Please select your key pair (pem key) that is created before
+Example: clarusway.pem
+```
+
+- Network settings
+
+```text
+Network Platform : Virtual Private Cloud (VPC)
+```
+
+- Security groups
+
+```text
+Please select security group named ALBSecGroup
+```
+
+- Storage (volumes)
+
+```text
+keep it as default (Volume 1 (AMI Root) (8 GiB, EBS, General purpose SSD (gp2)))
+```
+
+- Resource tags
+
+```text
+Key             : Name
+Value           : ALBTargetInstance
+Resource type   : Instance
+```
+
+- Network interfaces
+
+```text
+Keep it as it is
+```
+
+- Within Advanced details section, we will just use user data settings. Please paste the script below into the `user data` field.
+
+```bash
+#!/bin/bash
+
+#update os
+yum update -y
+#install apache server
+yum install -y httpd
+# get private ip address of ec2 instance using instance metadata
+TOKEN=`curl -X PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 21600"` \
+&& PRIVATE_IP=`curl -H "X-aws-ec2-metadata-token: $TOKEN" http://169.254.169.254/latest/meta-data/local-ipv4`
+# get public ip address of ec2 instance using instance metadata
+TOKEN=`curl -X PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 21600"` \
+&& PUBLIC_IP=`curl -H "X-aws-ec2-metadata-token: $TOKEN" http://169.254.169.254/latest/meta-data/public-ipv4` 
+# get date and time of server
+DATE_TIME=`date`
+# set all permissions
+chmod -R 777 /var/www/html
+# create a custom index.html file
+echo "<html>
+<head>
+    <title> Congratulations! You have created an instance from Launch Template</title>
+</head>
+<body>
+    <h1>This web server is launched from launch template by YOUR_NAME</h1>
+    <p>This instance is created at <b>$DATE_TIME</b></p>
+    <p>Private IP address of this instance is <b>$PRIVATE_IP</b></p>
+    <p>Public IP address of this instance is <b>$PUBLIC_IP</b></p>
+</body>
+</html>" > /var/www/html/index.html
+# start apache server
+systemctl start httpd
+systemctl enable httpd
+```
+
+### Step-2: Launch Two Instances Using the Launch Template
+
+- Go to Launch Templates section on left-hand menu on AWS EC2 Dashboard.
+
+- Select the launch template named `MyTemplate`.
+
+- Click `Actions >> Launch instance` from template interface.
+
+```text
+Number of instances  : 2
+```
+
+- Click "Launch Instance from Template"
+
+- Go to the instance page from the left-hand menu . Show the differences of newly created instances on the browser (IP and dates) via entering public IP addresses.
