@@ -162,3 +162,59 @@ Number of instances  : 2
 - Click "Launch Instance from Template"
 
 - Go to the instance page from the left-hand menu . Show the differences of newly created instances on the browser (IP and dates) via entering public IP addresses.
+
+## Part 3 - Create a target group
+
+- Go to `Target Groups` section under the Load Balancing part on left-hand side and click it.
+
+- Click `Create Target Group` button.
+
+- Basic configuration.
+
+```text
+Choose a target type    : Instances
+Target Groups Name      : MyFirstTargetGroup
+Protocol                : HTTP
+Port                    : 80
+VPC                     : Default
+Protocol version        : HTTP1
+```
+
+- Health checks
+
+```text
+Health check protocol   : HTTP
+Health check path       : /
+```
+
+- Advance Health check settings.
+
+```text
+Port                    : Traffic port
+Healthy treshold        : 5
+Unhealthy treshold      : 2
+Timeout                 : 5 seconds
+Interval                : 10 seconds
+Succes codes            : 200
+```
+
+- Tags
+
+```text
+Key                     : Name
+Value                   : MyTargetGroup
+```
+
+- Click next.
+
+- Select two instances that is created from Launch Template before and add to them to the target group.
+
+```text
+Ports for the selected instances : 80
+```
+
+- Click `Include as pending below` button.
+
+- Show that two instances are added to the target group.
+
+- Click `Create target group` button.
