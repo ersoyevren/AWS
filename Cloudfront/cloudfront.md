@@ -50,3 +50,28 @@
 
 - Properties >>> Static Website Hosting >>> Edit >>> Enable >>> Index document : index.html
 
+## Part 3 - Create CloudFront Distribution
+
+- First of all we need to copy endpoint of S3 static website bucket.
+
+- Go to S3 click on S3 static website bucket >>> Properties >>> Static Website Hosting >>> Copy the endpoint (without http://).
+
+- Go to CloudFront service and click "Create a CloudFront Distribution"
+
+- Create Distribution :
+  - Origin:
+    - Origin Domain: Paste the "endpoint" (without http://) of the S3 bucket
+  - Default Cache Behavior:
+    - Viewer Protocol Policy: Select "Redirect HTTP to HTTPS"
+  - Settings
+    - Alternate Domain Names (CNAME): [your-domain-name]
+    - Custom SSL Certificate: Select your newly created certificate
+
+- Leave the other settings as default.
+
+- Click "Create Distribution".
+
+- It may take some time distribution to be deployed. (Check status of distribution to be "Enabled")
+
+- When it is deployed, copy the "Domain name" of the distribution. 
+
