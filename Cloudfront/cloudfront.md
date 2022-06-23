@@ -75,3 +75,59 @@
 
 - When it is deployed, copy the "Domain name" of the distribution. 
 
+## Part 4 - Creating Route 53 record sets (Alias)
+
+- Go to Route53 >>> Hosted Zones, 
+
+- click on your public domain name,
+
+- click "Create record",
+
+```bash
+Record Name: None (Leave empty)
+Record Type : A
+Value: (Turn on Alias)
+Route traffic to: 
+    - Alias to CloudFront distribution endpoint
+    - US East (N.Virginia) [us-east-1]
+    - choose your CloudFront distribution endpoint
+Routing policy: Simple Routing
+```
+
+- hit "Create records" at the bottom,
+
+- go to the target domain name "[your DNS name].net" on browser,
+
+- check if it is working with "https protocol",
+
+- show the content of web page.
+
+## Part 5 - Configuring CloudFront Distribution
+
+Step-1 - Invalidation
+
+- Go to your S3 bucket hosting the website and put the "ryu.jpg" file in the "image-v2" folder (not in v1) to your bucket. 
+
+- Go to the target domain name "[your DNS name].net" on browser and notice the image has't been changed.
+
+- Go to CloudFront and select the newly created distribution.
+
+- Select the "Invalidations" tab and click "Create Invalidation"
+
+- On the opening page enter "/ryu.jpg" and click "Invalidate". 
+
+- After the invalidation process is completed, check the website and notice the image is updated now.
+
+Step-2 - Geographic Restriction
+
+- Select "Geographic restrictions" tab >>> Edit
+
+- Restriction Type : Block List
+
+- Countries : US-United States 
+
+- Click "Save changes"
+
+- Go to your website and show the webpage is blocked.
+
+Disable and delete your distribution.
