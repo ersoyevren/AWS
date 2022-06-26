@@ -77,3 +77,60 @@ Tag             :
     Value       : EC2-2
 ```
 
+## Part 2 - Creating EFS
+
+Open the Amazon EFS console at https://console.aws.amazon.com/efs/.
+
+- Click "Create File System" 
+
+```text
+
+Name                            : FirstEFS
+Virtual Private Cloud (VPC)     : Default VPC (Keep default)
+Availability and Durability     : Regional (Keep default)
+```
+
+- To customize settings manually, select the 'Customize' option seen at the bottom 
+
+```text
+
+General
+
+Name                    : FirstEFS (Comes default from previous setting)
+
+Availability and Durability : Regional (Comes default from previous setting)
+
+Automatic backups       : Unchecked "Enable automatic backups"
+
+Lifecycle management    : Select "None"
+
+Performance mode        : General Purpose
+
+Throughput mode         : Bursting
+
+Encryption              : Enable encryption of data at rest
+
+Tags                    : optional
+```
+Click Next
+
+```text
+
+- Virtual Private Cloud (VPC): Default VPC
+
+- Mount targets: 
+  - select all AZ (keep it default)
+  - Clear "default sg" from all AZ
+  - Add "EFS SecGrp" to all AZ
+  
+
+- Show that you can only add one mount point for each AZ though it has multiple subnets(for example custom VPC) 
+```
+Click next 
+
+```text
+File system policy - optional------> keep it as is
+```
+Click next. Then review and Create 
+
+Show that it is created. 
