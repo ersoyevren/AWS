@@ -104,3 +104,61 @@ stress --cpu 80 --timeout 20000   #(optionally using 3000 for timeout)
 
 - go to terminal and stop the stress tool using "Ctrl+C" command
 
+## Part 3 - Create an Alarm.
+
+- Select Alarms on left hand pane
+
+- click "Create Alarm"
+
+- Click "Select metric"
+
+- Select EC2 ---> Per-Instance Metrics ---> "CPUUtilization" ---> Select metric
+
+```bash
+Metric      : change "period" to 1 minute and keep remaining as default
+Conditions  : 
+  - Treshold Type                 : Static
+  - Whenever CPUUtilization is... : Greater
+  - than...                       : 60
+```
+
+- click next
+
+```bash
+Notification:
+  - Alarm state trigger : In alarm
+  - Select an SNS topic : 
+    - Create new topic
+      - Create a new topic… : Clarus-alarm
+      - Email endpoints that will receive the notification…
+: <your email adress>
+    - create topic
+
+EC2 action
+  - Alarm state trigger
+    - In alarm ---> Select "Stop Instance"
+```
+
+- click next
+
+- Alarm Name  : My First Cloudwatch Alarm
+  Description : My First Cloudwatch Alarm
+
+- click next --- > review and click create alarm
+
+- go to email box and confirm the e-mail sent by AWS Cloudwatch service
+
+- go to the terminal and connect EC2 instance via ssh
+
+- start the stress tool:
+
+```bash
+stress --cpu 80 --timeout 20000
+```
+- Go to dashboard and check the EC2 metrics
+
+- you will receive a alarm message to your email and this message trigger to stop your EC2 Instance.
+
+- go to EC2 instance list and show the stopped instance
+
+- restart this instance.
