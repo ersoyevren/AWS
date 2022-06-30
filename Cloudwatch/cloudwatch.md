@@ -162,3 +162,243 @@ stress --cpu 80 --timeout 20000
 - go to EC2 instance list and show the stopped instance
 
 - restart this instance.
+
+### Part 4 - CloudWatch Events with Lambda
+
+#### Step 1: Create Role
+
+- Go to IAM console a create Policy named "start-stop-instance" including these json script seen below:
+
+```text 
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents"
+            ],
+            "Resource": "arn:aws:logs:*:*:*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "ec2:Start*",
+                "ec2:Stop*"
+            ],
+            "Resource": "*"
+        }
+    ]
+}
+
+```
+- than create a IAM Role that will be used in Lambda Function 
+
+- Click Roles on left hand pane
+
+- click create role
+
+- select Lambda ---> click next permission
+
+- select newly created Policy named "start-stop-instance"  ---> Next
+
+- Add tags ---> Next
+
+- Review
+	- Role Name :start-stop-instance
+  - Role Description: start-stop-instance
+
+- click create role
+
+#### Step 2: Creating Stop Lambda Functions
+
+- Go to Lambda Service on AWS Console
+
+- Functions ----> Create Lambda function
+```text
+1. Select Author from scratch
+  Name: Stop_Instance
+  Runtime: Python 3.9
+  Role: 
+    Existing Role: "start-stop instance"
+  Click 'Create function'
+```
+
+- Configuration of Function Code
+
+- In the sub-menu of configuration go to the "Function code section" and paste code seen below
+
+```python
+import boto3
+region = 'us-east-1'
+instances = ['i-02c107da60f5dad15']#DON'T FORGET TO CHANGE ME
+ec2 = boto3.client('ec2', region_name=region)
+
+def lambda_handler(event, context):
+    ec2.stop_instances(InstanceIds=instances)
+    print('stopped your instances: ' + str(instances))
+
+```
+- Don't forget to change Instance ID in the Code. 
+
+- Click "DEPLOY" button
+
+
+#### Step 3 Testing your function - Create test event
+
+Click 'Test' button and opening page Configure test events
+```
+Select: Create new test event
+Event template: Hello World
+Event name: teststop
+Input test event as;
+
+{}
+
+Click 'Create'
+Click 'Test'
+```
+You will see the message Execution result: 
+
+- Than check the EC2 instance that it it stopped. 
+
+#### Step 4: Creating Start Lambda Functions
+
+- Go to Lambda Service on AWS Console
+
+- Functions ----> Create Lambda function
+```text
+1. Select Author from scratch
+  Name: Start_Instance
+  Runtime: Python 3.9
+  Role: 
+    Existing Role: "start-stop-instance"
+  Click 'Create function'
+```
+
+- Configuration of Function Code
+
+- In the sub-menu of configuration go to the "Function code section" and paste code seen below
+
+```python
+import boto3
+region = 'us-east-1'
+instances = ['i-02c107da60f5dad15']
+ec2 = boto3.client('ec2', region_name=region)
+
+def lambda_handler(event, context):
+    ec2.start_instances(InstanceIds=instances)
+    print('started your instances: ' + str(instances))
+```
+
+- Don't forget to change Instance ID in the Code. 
+
+- Click "DEPLOY" button
+
+#### Step 5 Testing your function - Create test event
+
+Click 'Test' button and opening page Configure test events
+```
+Select: Create new test event
+Event template: Hello World
+Event name: teststart
+Input test event as;
+
+{}
+
+Click 'Create'
+Click 'Test'
+```
+You will see the message Execution result: 
+
+- Than check the EC2 instance that it will be restarted thanks to the Lambda 
+
+#### Step 6 Creating Stop-Cloudwatch Event
+
+- Go to the CloudWatch Console and from left hand menu under the Event sub-section
+- Click on "Amazon EventBridgeGo" 
+Event Bus -------> Default(keep it as is)
+Rules     -------> Create Rule 
+Click on "Create Rule"
+```
+- Name                   : cw_event_stop
+- Description - optional : cw_event_stop
+- Event Bus              : Default(keep it as is)
+- Rule type              : "Schedule"
+```
+- Click on Next
+
+- Define schedule
+
+```text
+- Sample event     :  Keep it as is
+- Schedule pattern : A fine-grained schedule 
+                    Cron expression: 45 19 ? * MON-FRI * 
+                    Note: (- Explain the cron parameters. 
+                           - Choose Local Time 
+                           - Change cron expression according to session time to be triggered within 3 minutes.)
+
+```
+
+- Click on "Next: "
+
+- Select the Target parameters:
+
+```text
+Targets: 
+- AWS service
+- Select Target: Lambda Function
+                   - Function: Stop_Instance
+
+```
+- Click on "Next "
+- Click "Configure Details"
+- Click "Create Rule."
+
+Show the Instance state that Event is gonna stop instance. 
+
+#### Step 7 Creating Start-Cloudwatch Event
+
+- Go to the CloudWatch Console and from left hand menu under the Event sub-section
+- Click on "Amazon EventBridgeGo" 
+Event Bus -------> Default(keep it as is)
+Rules     -------> Create Rule 
+Click on "Create Rule"
+```
+- Name                   : cw_event_start
+- Description - optional : cw_event_start
+- Event Bus              : Default(keep it as is)
+- Rule type              : "Schedule"
+```
+- Click on Next
+
+- Define schedule
+
+```text
+- Sample event     :  Keep it as is
+- Schedule pattern : A fine-grained schedule 
+                    Cron expression: 50 19 ? * MON-FRI * 
+                    Note: (- Explain the cron parameters. 
+                           - Choose Local Time 
+                           - Change cron expression according to session time to be triggered within 3 minutes.)
+
+```
+
+- Click on "Next: "
+
+- Select the Target parameters:
+
+```text
+Targets: 
+- AWS service
+- Select Target: Lambda Function
+                   - Function: Start_Instance
+
+```
+- Click on "Next "
+- Click "Configure Details"
+- Click "Create Rule."
+
+- Show the Instance state that Event is gonna start instance. 
