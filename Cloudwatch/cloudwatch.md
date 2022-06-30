@@ -402,3 +402,139 @@ Targets:
 - Click "Create Rule."
 
 - Show the Instance state that Event is gonna start instance. 
+
+### Part 5 - Configure Logging with Agent 
+
+STEP 1 : Create second EC2 Instance
+
+- Go to EC2 menu using AWS console
+
+- Launch an Instance
+- Configuration of instance.
+
+```text
+AMI             : Amazon Linux 2
+Instance Type   : t2.micro
+Tag             :
+    Key         : Name
+    Value       : Cloudwatch_Log
+Security Group ---> Allows all traffic --->  anywhere
+```
+- Set user data.
+
+```bash
+#! /bin/bash
+yum update -y
+amazon-linux-extras install nginx1.12
+chkconfig nginx on
+cd /usr/share/nginx/html
+chmod o+w /usr/share/nginx/html
+rm index.html
+wget https://raw.githubusercontent.com/awsdevopsteam/route-53/master/index.html
+wget https://raw.githubusercontent.com/awsdevopsteam/route-53/master/ken.jpg
+service nginx start
+```
+
+STEP 2 : Create IAM role
+
+- Go to IAM role on AWS console
+
+- Click Roles on left hand pane
+
+- click create role
+
+- select EC2 ---> click next permission
+
+- select "CloudWatchLogsFullAccess"  ---> Next
+
+- Add tags ---> Next
+
+- Review
+	- Role Name : Claruscloudwatchlog  
+  - Role Description: Clarusway Cloudwatch EC2 logs access role
+
+- click create role
+
+- Go to instance named "Cloudwatch_Log" ---> Actions ---> Security ---> Modify IAM role ---> Attach "CloudWatchLogsFullAccess" role ---> Apply
+
+STEP 3:  Install and Configure the CloudWatch Logs Agent
+
+- Go to the terminal and connect to the Instance named "Cloudwatch_Log"
+
+- install cloudwatch log agent with following command:
+```bash
+sudo yum install -y awslogs
+sudo systemctl start awslogsd
+sudo systemctl enable awslogsd.service
+```
+- go to the Cloudwatch menu and select Log groups on left hand pane
+
+- click the created log group named "/var/log/messages" ---> show the newly created "log streams"
+
+STEP 4: Configure Nginx logs
+
+- go to the terminal and connect to the EC2 Instance named "Cloudwatch_Log" with ssh
+
+- go to the "awslogs" folder using "cd /etc/awslogs/" command
+
+- use the root account
+```bash
+sudo su
+```
+- open the file named awslogs.conf
+
+```bash
+vi awslogs.conf
+```
+
+- at the bottom of the page you'll see the following comments:
+
+```bash
+[/var/log/messages]
+datetime_format = %b %d %H:%M:%S
+file = /var/log/messages
+buffer_duration = 5000
+log_stream_name = {instance_id}
+initial_position = start_of_file
+log_group_name = /var/log/messages
+```
+
+- press "I" and paste the following command right after command seen above: 
+
+```bash
+
+[/var/log/nginx/access.log]
+datetime_format = %b %d %H:%M:%S
+file = /var/log/nginx/access.log
+buffer_duration = 5000
+log_stream_name = {instance_id}
+initial_position = start_of_file
+log_group_name = AccessLog
+
+[/var/log/nginx/error.log]
+datetime_format = %b %d %H:%M:%S
+file = /var/log/nginx/error.log
+buffer_duration = 5000
+log_stream_name = {instance_id}
+initial_position = start_of_file
+log_group_name = ErrorLog
+```
+
+- save the file and close
+```bash
+:wq
+```
+
+- to activate the new configuration, stop and start the "awslogsd".
+
+```
+sudo systemctl stop awslogsd
+sudo systemctl start awslogsd
+```
+- Go to the EC2 instance and grab the public IP address. And paste it to the browser. Their logs will be sent to the cloudwatch logs part.
+
+- go to the Cloudwatch logs group again 
+
+- click the created log group named "AccessLog" and "ErrorLog" ---> show the newly created "log streams"
+
+- ıf you get any problem try to restart instance .
