@@ -284,3 +284,45 @@ sudo xfs_growfs /dev/xvda1
 lsblk
 df -h
 ```
+# PART 4 - AUTOMOUNT EBS VOLUMES AND PARTITIONS ON REBOOT
+
+- reboot and show that configuration is gone
+```
+sudo reboot now
+```
+- back up the /etc/fstab file.
+```
+sudo cp /etc/fstab /etc/fstab.bak
+```
+- open /etc/fstab file and 
+
+```
+sudo nano /etc/fstab 
+```
+- add the following info to the existing.(UUID's can also be used)
+```
+ /dev/xvdf       mnt/mp1   ext4    defaults,nofail        0       0
+ /dev/xvdg1      mnt/mp2   ext4  defaults,nofail        0       0
+ /dev/xvdg2      mnt/mp3   ext4  defaults,nofail        0       0
+```
+- CTRL+X and Y to save
+
+- reboot and show that configuration exists (NOTE)
+```
+sudo reboot now
+```
+- list volumes to show current status, all volumes and partitions should be listed
+```
+lsblk
+```
+- show the used and available capacities related with volumes and partitions
+```
+df -h
+```
+- if there is data on it, check if the data still persists.
+```
+ls  /mnt/mp1/
+ls  /mnt/mp3/
+```
+
+# NOTE: You can use "sudo mount -a" to mount volumes and partitions after editing fstab file without rebooting.
