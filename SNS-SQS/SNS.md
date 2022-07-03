@@ -68,3 +68,50 @@
 
 - Show the topic and the test message sent from SNS.
 
+## Part 2 - Creating a CloudWatch Event (Amazon EventBridge) to Invoke SNS 
+
+### Step 1 : Create Rule
+
+- Go to `Amazon EventBridge` service on AWS console.
+
+- Click `Rules` >> `Create Rule` from the left-hand menu.
+
+- `Define rule detail`
+    - Name : EC2StateChange
+    - Description : -
+    - Event bus : default
+    - Rule type : Rule with an event pattern
+
+- `Build event pattern`
+    - Event source : AWS services
+    - Sample event: -
+    - Event pattern :
+      - Event source : EC2
+      - Event type : EC2 Instance State-change Notification
+      - Any state
+      - Any instance
+
+- `Select Targets`
+    - Target1
+
+      Target types: AWS Service
+        - SNS topic
+        - Topic : Demo-topic
+    
+- `Configure tags` -
+
+- Click `Create Rule`.
+
+### Step 2 : Invoke SNS
+
+- Go to `EC2` service on AWS console.
+
+- Change state of any available instance like starting a stopped one (Launch a new one if you don't have any).
+
+- Go to your mail and check inbox.
+
+- Open mail from `My-First-Topic`.
+
+- Show the topics and the messages sent from SNS.
+
+- Delete/terminate the resources created.
