@@ -29,3 +29,76 @@ unzip awscliv2.zip  #install "unzip" if not installed
 sudo ./aws/install
 
 
+# Configuration
+
+aws configure
+
+cat .aws/config
+cat .aws/credentials
+
+aws configure --profile user1
+
+export AWS_PROFILE=user1
+export AWS_PROFILE=default
+
+aws configure list-profiles
+
+aws sts get-caller-identity
+
+# IAM
+aws iam list-users
+
+aws iam create-user --user-name aws-cli-user
+
+aws iam delete-user --user-name aws-cli-user
+
+
+# S3
+aws s3 ls
+
+aws s3 mb s3://guile-cli-bucket
+
+aws s3 cp in-class.yaml s3://guile-cli-bucket
+
+aws s3 ls s3://guile-cli-bucket
+
+aws s3 rm s3://guile-cli-bucket/in-class.yaml
+
+aws s3 rb s3://guile-cli-bucket
+
+
+# EC2
+aws ec2 describe-instances
+
+aws ec2 run-instances \
+   --image-id ami-0022f774911c1d690 \
+   --count 1 \
+   --instance-type t2.micro \
+   --key-name KEY_NAME_HERE # put your key name
+
+aws ec2 describe-instances \
+   --filters "Name = key-name, Values = KEY_NAME_HERE" # put your key name
+
+aws ec2 describe-instances --query "Reservations[].Instances[].PublicIpAddress[]"
+
+aws ec2 describe-instances \
+   --filters "Name = key-name, Values = KEY_NAME_HERE" --query "Reservations[].Instances[].PublicIpAddress[]" # put your key name
+
+aws ec2 describe-instances \
+   --filters "Name = instance-type, Values = t2.micro" --query "Reservations[].Instances[].InstanceId[]"
+
+aws ec2 stop-instances --instance-ids INSTANCE_ID_HERE # put your instance id
+
+aws ec2 terminate-instances --instance-ids INSTANCE_ID_HERE # put your instance id
+
+# Working with the latest Amazon Linux AMI
+
+aws ssm get-parameters --names /aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2 --region us-east-1
+
+aws ssm get-parameters --names /aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2 --query 'Parameters[0].[Value]' --output text
+
+aws ec2 run-instances \
+   --image-id $(aws ssm get-parameters --names /aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2 --query 
+'Parameters[0].[Value]' --output text) \
+   --count 1 \
+   --instance-type t2.micro
