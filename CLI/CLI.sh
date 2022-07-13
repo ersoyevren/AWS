@@ -102,3 +102,16 @@ aws ec2 run-instances \
 'Parameters[0].[Value]' --output text) \
    --count 1 \
    --instance-type t2.micro
+
+   # Update AWS CLI Version 1 on Amazon Linux (comes default) to Version 2
+
+# Remove AWS CLI Version 1
+sudo yum remove awscli -y # pip uninstall awscli/pip3 uninstall awscli might also work depending on the image
+
+# Install AWS CLI Version 2
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+unzip awscliv2.zip  #install "unzip" if not installed
+sudo ./aws/install
+
+# Update the path accordingly if needed
+export PATH=$PATH:/usr/local/bin/aws
