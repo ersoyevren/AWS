@@ -163,3 +163,117 @@ Number of instances  : 2
 
 - Go to the instance page from the left-hand menu . Show the differences of newly created instances on the browser (IP and dates) via entering public IP addresses.
 
+## Part 3 - Create a target group
+
+- Go to `Target Groups` section under the Load Balancing part on left-hand side and click it.
+
+- Click `Create Target Group` button.
+
+- Basic configuration.
+
+```text
+Choose a target type    : Instances
+Target Groups Name      : MyFirstTargetGroup
+Protocol                : HTTP
+Port                    : 80
+VPC                     : Default
+Protocol version        : HTTP1
+```
+
+- Health checks
+
+```text
+Health check protocol   : HTTP
+Health check path       : /
+```
+
+- Advance Health check settings.
+
+```text
+Port                    : Traffic port
+Healthy treshold        : 5
+Unhealthy treshold      : 2
+Timeout                 : 5 seconds
+Interval                : 10 seconds
+Succes codes            : 200
+```
+
+- Tags
+
+```text
+Key                     : Name
+Value                   : MyTargetGroup
+```
+
+- Click next.
+
+- Select two instances that is created from Launch Template before and add to them to the target group.
+
+```text
+Ports for the selected instances : 80
+```
+
+- Click `Include as pending below` button.
+
+- Show that two instances are added to the target group.
+
+- Click `Create target group` button.
+
+## Part 4 - Creating Application Load Balancer together with Target Group
+
+- Go to the Load Balancing section on left-hand menu and click `Load Balancers`.
+
+- Tap `Create Load Balancer` button.
+
+- Click `Create` button inside the `Application Load Balancer` section.
+
+- Basic configuration
+
+```text
+Load Balancer Name     : MyFirstALB
+Scheme                 : Internet-facing
+IP address type        : IPv4
+```
+
+- Network mapping
+
+```text
+VPC          : Default VPC
+Mappings     : Select all AZ's
+```
+
+- Security groups
+
+```text
+Security groups  : Remove Default SG and select ALBSecGroup
+```
+
+- Listeners and routing
+```text
+Protocol       : HTTP
+Port           : 80
+Default action : Forward to MyFirstTargetGroup
+```
+
+- Keep rest as is
+
+- Review if everything is ok, and then click the `Create load balancer` button
+
+```text
+Successfully created load balancer!
+```
+
+- Click `Close` tab
+
+- Please wait for `State` to turn into `active` from `provisioning`.
+
+- Show on the browser that how the requests are routed to different instance with the help of the ALB.
+
+```text
+- Select Load Balancer named MyFirstALB
+- Copy the ALB's DNS name. It should be something like `MyFirstALB-1185163036.us-east-1.elb.amazonaws.com`
+- Paste is on browser and refresh it
+- Show the changing Public and Private IP addresses and time that the instances was created
+```
+
+- Explain the monitoring dashboard of ALB.
