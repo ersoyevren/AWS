@@ -48,38 +48,38 @@ aws sts get-caller-identity
 # IAM
 aws iam list-users
 
-aws iam create-user --user-name aws-cli-user
+aws iam create-user --user-name aws-cli-user #kullanici olusturuyor.
 
-aws iam delete-user --user-name aws-cli-user
+aws iam delete-user --user-name aws-cli-user  #kullanici siliyor.
 
 
 # S3
 aws s3 ls
 
-aws s3 mb s3://guile-cli-bucket
+aws s3 mb s3://guile-cli-bucket #bucket olusturuyor.
 
-aws s3 cp in-class.yaml s3://guile-cli-bucket
+aws s3 cp in-class.yaml s3://guile-cli-bucket #in-class.yaml dosyasini s3... bucketina kopyaliyor.
 
-aws s3 ls s3://guile-cli-bucket
+aws s3 ls s3://guile-cli-bucket  #bucketin altindaki dosyalari listeliyor.
 
-aws s3 rm s3://guile-cli-bucket/in-class.yaml
+aws s3 rm s3://guile-cli-bucket/in-class.yaml #bucket icindeki dosyayi siliyor.
 
-aws s3 rb s3://guile-cli-bucket
+aws s3 rb s3://guile-cli-bucket  #bucket siliyor.
 
 
 # EC2
-aws ec2 describe-instances
+aws ec2 describe-instances # bu regiondaki tum instance larimi listeliyor.
 
-aws ec2 run-instances \
+aws ec2 run-instances \   # bir tane ec2 ayaga kaldiriyor
    --image-id ami-0022f774911c1d690 \
    --count 1 \
    --instance-type t2.micro \
    --key-name KEY_NAME_HERE # put your key name
 
-aws ec2 describe-instances \
+aws ec2 describe-instances \  # filtreleme yapiyorum
    --filters "Name = key-name, Values = KEY_NAME_HERE" # put your key name
 
-aws ec2 describe-instances --query "Reservations[].Instances[].PublicIpAddress[]"
+aws ec2 describe-instances --query "Reservations[].Instances[].PublicIpAddress[]" #cikti kisminda public olan instance larimi veriyor.
 
 aws ec2 describe-instances \
    --filters "Name = key-name, Values = KEY_NAME_HERE" --query "Reservations[].Instances[].PublicIpAddress[]" # put your key name
@@ -101,7 +101,7 @@ aws ec2 run-instances \
    --image-id $(aws ssm get-parameters --names /aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2 --query 
 'Parameters[0].[Value]' --output text) \
    --count 1 \
-   --instance-type t2.micro
+   --instance-type t2.micro   # en son surum image id ile bu t2.micro yu run edebiliyorum.
 
    # Update AWS CLI Version 1 on Amazon Linux (comes default) to Version 2
 
