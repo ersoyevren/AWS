@@ -122,3 +122,133 @@ Keep it as is
 
 21. Go to EC2 Instance menu and show the created instance.
 
+## Part 2 - Modifying Launch Template
+
+### Step 1: Launch Template Version 2
+
+22. Go to Launch Template menu on the left hand pane
+
+23. Select template named `MyClaruswayTemplate` ---> `Actions` ---> `Modify template (Create New Version)`
+
+24. Template version description
+
+
+V2 nginx
+# buradaki makineye v2 deyip icine nginx kuracagiz. 27. bolumdeki user data ile.
+
+25. Key pair
+
+
+Select your .pem file name
+
+
+26. Resource tags
+
+
+Key             : Name
+Value           : Webserver-V2
+Resource type   : Instance
+
+
+27. Go to `Advance Details` on the bottom and add the script given below into the `user data` field.
+
+
+#!/bin/bash
+
+yum update -y
+amazon-linux-extras install nginx1
+systemctl enable nginx
+systemctl start nginx
+
+
+28. Go to `Launch Template` Menu and click on `MyClaruswayTemplate`.
+
+29. Select version `2` from the `Versions` tab.
+
+
+Version         : 2
+Description     : V2 nginx
+
+
+30. Select `Actions` ---> `Launch instance from template`.
+
+
+Number of Instance : 1
+
+
+31. Click the 'launch Instance from template' button at the bottom.
+
+32. Go to `Instance Menu` and show recently created EC2 instance.
+
+33. Copy EC2's 'Public IP`, paste it in a browser and show 'nginx' webpage.
+
+### Step 2: Launch Template Version 3
+
+34. Go to `Launch Template` menu on the left hand pane.
+
+35. Select template named `MyClaruswayTemplate` ---> `Actions` ---> 'Modify template (Create New Version)'.
+
+36.  Template version description
+
+
+V3 nginx
+
+
+37. Key pair
+
+
+Select your .pem file name
+
+
+38. Resource tags
+
+
+Key             : Name
+Value           : Webserver-V3
+Resource type   : Instance
+
+
+39. Go to `Advance Details` on the bottom and add the script given below into the `user data` field.
+
+
+#! /bin/bash
+
+yum update -y
+amazon-linux-extras install nginx1
+systemctl start nginx
+cd /usr/share/nginx/html
+chmod -R 777 /usr/share/nginx/html
+rm index.html
+wget https://raw.githubusercontent.com/awsdevopsteam/ngniex/master/index.html
+wget https://raw.githubusercontent.com/awsdevopsteam/ngniex/master/ryu.jpg
+systemctl restart nginx
+systemctl enable nginx
+
+
+40. Go to `Launch Template` Menu and click on `MyClaruswayTemplate`.
+
+41. Select version `3` from the `Versions` tab.
+
+
+Version         : 3
+Description     : V3 nginx
+
+
+42. Select `Actions` ---> `Launch instance from template`.
+
+
+Number of Instance : 1
+
+
+43. Click the `launch Instance from template` button at the bottom.
+
+44. Go to `Instance Menu` and show recently created EC2 instance.
+
+45. Copy EC2's `Public IP`, paste it in a browser and show `nginx` webpage with custom image.
+
+
+# default version, launch template seciyoruz. ardindan version bolumunde istedigimiz versionu
+# seciyoruz. daha sonra da actions-set default version seciyoruz.
+
+# bir makineden de template olusturabiliriz. makineyi secip>
+actions-image and template-create template from instance
