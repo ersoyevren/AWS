@@ -56,22 +56,30 @@ lsblk
 ```
 sudo file -s /dev/xvdf
 ```
+# sonucunda data cikiyorsa bu yer bir yere bagli degildir.
+
 - if not formatted, format the new volume
 ```
 sudo mkfs -t ext4 /dev/xvdf
 ```
+# bu sekilde dosyaya format atiyoruz. cunku format olmadan islem yapamiyoruz.
 - check the format of the volume again after formatting
 ```
 sudo file -s /dev/xvdf
 ```
+# artik formatlama olduama dosyayi yine goremiyoruz. cunku mounting islemini tamamlamadik.
 - create a mounting point path for new volume (volume-1)
 ```
 sudo mkdir /mnt/mp1
 ```
+# mount yapmak icin bir tane dosya olusturuyoruz.
+
 - mount the new volume to the mounting point path
 ```
 sudo mount /dev/xvdf /mnt/mp1/
 ```
+# /dev/xvdf ile /mnt/mp1/ dosyalarini birbirine bagla.
+
 - check if the attached volume is mounted to the mounting point path
 ```
 lsblk
