@@ -40,6 +40,7 @@ At the end of the this hands-on training, students will be able to;
 - Show the Dashboard of IAM 
 
 - Show IAM users "sign-in link" and customize it as alias . Tell the student to write down the account alias.
+# iam hesabina girdikten sonra sag tarafta Account Alias var. buradan alias imizi olusturuabiliyoruz. amac iam servicisine girerken account numarasini veya alias istiyor. account hesap numarasini aklimizda tutmak zor oldugu icin alias olusturuyoruz.
 
 - Create IAM user with Administrator access for your daily work :
 

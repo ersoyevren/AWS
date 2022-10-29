@@ -71,7 +71,7 @@ Securtiy Group: "0.0.0.0/0-----> Port 80"
 
 
 sudo chmod -R 777 /var/www/html
-
+# pathin altindaki dosyalara izin ver. 
 
 9. Go to the /var/www/html
 
@@ -80,6 +80,7 @@ cd /var/www/html
 10. Create a custom `index.html` file under `/var/www/html/` folder to be served on the Server.
 
 echo "HELLO CLARUSWAY" > /var/www/html/index.html
+# belirtilen pathin icindeki dosyaya echo ile hello clarusway yaziyor.
 
 11. check the index.html
 ls 
@@ -88,6 +89,7 @@ cat index.html
 12. Restart the httpd server and `check` from browser.
 
 sudo systemctl restart httpd
+# sistem tekrar kapanip acildiginda ayni durumu gorebiliiriz.
 
 
 # STEP_3- Customization of  Apache Web Server with HTML format
@@ -158,3 +160,4 @@ systemctl enable httpd
 
 curl http://ec2-3-15-183-78.us-east-2.compute.amazonaws.com8.us-east-2.compute.amazonaws.com
 
+# curl ile web uzerindeki durumu gorebiliriz.
