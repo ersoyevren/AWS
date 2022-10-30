@@ -102,8 +102,9 @@ ls
 ## Section 2: Enlarge the new volume (volume-1) in AWS console and modify from terminal
 
 - modify the new volume in aws console, and enlarge capacity from 5GB to 6GB .
-- check if the attached volume is showing the new capacity
+- check if the attached volume is showing the new capacity 
 ```
+# burada consoldan modify ile volume 5 den 6 gb cikariyoruz. ls yaptigimizda bu gozukecek fakat df -h da gozukmeyecek.
 lsblk
 ```
 - show the real capacity used currently at mounting path, old capacity should be shown.
@@ -113,6 +114,7 @@ df -h
 - resize the file system on the new volume to cover all available space.
 ```
 sudo resize2fs /dev/xvdf
+# bu komut ile 5 gb in formatini ekledigimiz 1 gb da uygulamis olduk. 
 ```
 - show the real capacity used currently at mounting path, new capacity should reflect the modified volume size.
 ```
@@ -122,11 +124,14 @@ df -h
 ```
 ls /mnt/mp1/
 ```
+# bu komut ile belirtilen adreste var olan dosyalarin gitmedigini de goruyoruz.
+
 ## Section 3: Rebooting Instance
 
-- show that mounting point path will be gone when instance rebooted 
+show that mounting point path will be gone when instance rebooted 
 ```
 sudo reboot now
+# bu komuttan sonra public ve private adres degismez. 
 ```
 - show the new volume is still attached, but not mounted
 ```
@@ -135,10 +140,12 @@ lsblk
 - check if the attached volume is "already formatted" or not and has data on it.
 ```
 sudo file -s /dev/xvdf
+# dosyalama sisteminin olup olmadigini gorebiliyoruz.
 ```
 - mount the new volume to the mounting point path
 ```
 sudo mount /dev/xvdf /mnt/mp1/
+# reboot yapmis oldugumuzdan baglanti koptu. bu komut ile tekrar bagliyoruz.    
 ```
 - show the used and available capacity is same as the disk size.
 ```
@@ -187,6 +194,7 @@ sudo fdisk -l
 
 ```
 sudo fdisk /dev/xvdg
+# bu komut ile olusturdugumuz ve ec2 bagladigimiz volume partition lara ayiriiyoruz.
 
  n -> add new partition (with 1G size)
  p -> primary
@@ -205,6 +213,7 @@ sudo fdisk /dev/xvdg
  ```
 - format the new partitions
 ```
+Bu komutlar ile mount yapabilmek icin format atiyoruz.
 sudo mkfs -t ext4 /dev/xvdg1
 sudo mkfs -t ext4 /dev/xvdg2
 ```
@@ -212,6 +221,7 @@ sudo mkfs -t ext4 /dev/xvdg2
 ```
 sudo mkdir /mnt/mp2
 sudo mkdir /mnt/mp3
+# Bu komutlar ile mount yapabilmek icin klasor olusturuyoruz.
 ```
 - mount the new volume to the mounting point path
 ```
@@ -246,6 +256,7 @@ df -h
 - extend the partition 2 and occupy all newly available space.  Warning for space !!!!!!
 ```
 sudo growpart /dev/xvdg 2
+# bu sekilde artirilmis volume uzatiyorum.
 ```
 - ​show the real capacity used currently at mounting path, updated capacity should be shown.
 ```
@@ -254,6 +265,7 @@ lsblk
 - resize and extend the FILE System.
 ```
 sudo resize2fs /dev/xvdg2
+# bu sekilde formatliyorum.
 ```
 - show the newly created file to show persistence
 
@@ -269,6 +281,7 @@ sudo file -s /dev/xvda1
 ```
 
 - Go to Volumes, select instance's root volume and modify it (increase capacity 8 GB >> 12 GB).
+# burada root volume 12 gb cikariyoruz.
 
 - List block devices (lsblk) and file system disk space usage (df) of the instance again.
 
@@ -280,11 +293,13 @@ df -h
 - Extend partition 1 on the modified volume and occupy all newly avaiable space.
 ```
 sudo growpart /dev/xvda 1
+# uzattigimiz volume ekliyoruz.
 ```
 - Resize the xfs file system on the extended partition to cover all available space.
 
 ```
 sudo xfs_growfs /dev/xvda1
+# uzattigimiz volume formatliyoruz..
 ```
 - List block devices (lsblk) and file system disk space usage (df) of the instance again.
 - Partition and file system should be extended.
@@ -294,6 +309,9 @@ df -h
 ```
 # PART 4 - AUTOMOUNT EBS VOLUMES AND PARTITIONS ON REBOOT
 
+# normalde reboot ettigimizde root volume haric diger bagladigimiz dosyalar gidiyor. 
+# tekrar baglamamiz gerekiyor. ama asagidakileri yaparsak buna gerek kalmaz. reboot yapsakta bagladigimiz dosyalari gorebiliyriz.
+
 - reboot and show that configuration is gone
 ```
 sudo reboot now
@@ -301,6 +319,7 @@ sudo reboot now
 - back up the /etc/fstab file.
 ```
 sudo cp /etc/fstab /etc/fstab.bak
+# burada kendimizi saglama almak icin baska bir yere de kopyaliyoruz.
 ```
 - open /etc/fstab file and 
 

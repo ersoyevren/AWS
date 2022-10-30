@@ -71,6 +71,8 @@ cd /usr/share/nginx/html
 ls
 
 sudo chmod -R 777 /usr/share/nginx/html
+# belirtilen dosyada degisiklik yapabilmem icin yetki veriyorum.
+# -R ile klasorun altindaki tum dosyalara bu yetkiyi veriyor.
 
 7. Remove existing `index.html`.
 
@@ -80,7 +82,7 @@ sudo rm index.html
 
 wget https://raw.githubusercontent.com/awsdevopsteam/route-53/master/index.html
 wget https://raw.githubusercontent.com/awsdevopsteam/route-53/master/ken.jpg
-
+# wget komutu belirtilen adresteki dosyayi download eder.
 9. restart the Nginx Web Server.
 
 sudo systemctl restart nginx
@@ -88,6 +90,7 @@ sudo systemctl restart nginx
 10. configure to start while launching
 
 sudo systemctl enable nginx
+# makineyi kapatip tekrar actigimizda var olan yuklemeler ve islevler calisiyor.
 
 11. Check if the Web Server is working properly from the browser.
 
@@ -124,6 +127,8 @@ wget https://raw.githubusercontent.com/awsdevopsteam/route-53/master/index.html
 wget https://raw.githubusercontent.com/awsdevopsteam/route-53/master/ken.jpg
 systemctl restart nginx
 systemctl enable nginx
+
+# girilen userdata bilgilerini makinenin actions - instance settings - edit user data bolumunden bakilabilir.
 
 17. Review and launch the EC2 Instance
 
