@@ -148,6 +148,7 @@ systemctl enable httpd
 ```
 
 ### Step-2: Launch Two Instances Using the Launch Template
+# Amac ec2 lari launch template ile kolayca launch etmek. sayiyi istedigimiz gibi belirliyoruz.
 
 - Go to Launch Templates section on left-hand menu on AWS EC2 Dashboard.
 
@@ -191,11 +192,12 @@ Health check path       : /
 
 ```text
 Port                    : Traffic port
-Healthy treshold        : 5
-Unhealthy treshold      : 2
-Timeout                 : 5 seconds
-Interval                : 10 seconds
-Succes codes            : 200
+Healthy treshold        : 5             # arka arkaya 5 kez ulasinca healthy oluyor.
+Unhealthy treshold      : 2             # arka arkaya 2 kez ulasinca unhealthy oluyor.
+Timeout                 : 5 seconds     # 5 saniyede makineye ulasamayinca bunu unhealthy
+                                          olarak kabul ediyor. 2 kez olunca da makineyi kapatiyor.
+Interval                : 10 seconds  # 10 saniyede bir gidip root daki indexin calisip                                 calismadigini kontrol edecek
+Succes codes            : 200           # basta makinenin kodun calismasini bekleyecegi                                 sure. 
 ```
 
 - Tags
