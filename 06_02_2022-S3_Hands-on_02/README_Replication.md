@@ -167,6 +167,7 @@ PS: Please, do not forget to select "US East (Ohio)" as Region
     ]
 }
 ```
+
 ## Part 3 - Creating IAM Role for Bucket Replication
 
 - Go to `IAM Service` on AWS management console.
@@ -241,6 +242,7 @@ Role Description    : yourname.cross.replication.iam.role
 ```
 
 - Click `create role`.
+
 ## Part 4 - Configuring (Entire) Bucket Replica
 
 ### Step 1 - Configuring Bucket
