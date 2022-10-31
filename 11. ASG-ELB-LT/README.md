@@ -385,3 +385,210 @@ Step 3: Observe that Autoscaling keeps the target group in initial size.
 - Show the status of the stopped instance and refresh it. It probably takes a while to create a new instance by Auto Scaling.
 
 
+## Part 6 - Create Auto Scaling Policy
+
+- Go to `Auto Scaling Groups` --> click `First-AS-Group` --> `Automatic Scaling` --> `Add Policy`
+
+- Explain the Policy Types
+
+Step 1: Create `Add-Policy`;
+
+- Select `Simple Scaling` as Policy Type
+
+```text
+Scaling Policy Name : First Scaling Policy-Add
+```
+
+- Click Create a CloudWatch Alarm
+
+- Select Metric ---> `EC2` --> By Auto Scaling Group --> `First-AS-Group` and CPUUtilization
+
+- Metric --> Period: 1 minute
+
+- Conditions -->
+
+```text
+Threshold Type "Static"
+
+Select Greater
+
+Enter 60 as threshold value
+```
+
+- Click `Next`
+
+- Click `Remove` tab at the top of the page and do not set any Notification, Autoscaling and EC2 Action
+
+- Click `Next`
+
+- Add name and description
+
+```text
+Alarm name                      : Auto Scaling-Add
+Alarm description - optional    : Auto Scaling-Add
+```
+
+- Click `Next`, Review and Create alarm
+
+- Click `Create a CloudWatch alarm`
+
+- Go back to Autoscaling page and refresh the cloudwatch alarm
+
+- Select `Auto Scaling-Add` as Cloudwatch Alarm
+
+- Take the Action :
+
+```text
+Add --- 1 ---- Capacity Unit
+An Then wait   : 200
+```
+
+- Click Create
+
+Step 2: Create `Remove-Policy`;
+
+- Click `Add Policy`
+
+- Select `Simple Scaling` as Policy Type
+
+```text
+Scaling Policy Name : First Scaling Policy-Remove
+```
+
+- Click `Create a CloudWatch alarm`
+
+- Select Metric ---> `EC2` --> By Auto Scaling Group --> `First-AS-Group` and CPUUtilization
+
+- Metric --> Period: 1 minute
+
+- Conditions -->
+
+```text
+Threshold Type "Static"
+
+Select Lower
+
+Enter 30 as threshold value
+```
+
+- Click `Next`
+
+- Add name and description
+
+```text
+Alarm name                      : Auto Scaling-Remove
+Alarm description - optional    : Auto Scaling-Remove
+```
+
+- Click `Next`, Review and Create Alarm
+
+- Go back to Autoscaling page and refresh the Cloudwatch Alarm
+
+- Select `Auto Scaling-Remove` as Cloudwatch Alarm
+
+- Take the Action :
+
+```text
+Remove --- 1 ---- Capacity Unit
+An Then wait   : 200
+```
+
+Step 3: Testing
+
+- Go to Instance Menu
+
+- Select one of the Auto Scaling Instance and connect with SSH
+
+- Upload `stress tool`
+
+```bash
+sudo amazon-linux-extras install epel -y
+sudo yum install -y stress
+stress --cpu 80 --timeout 20000   
+```
+
+- Click the instance's Monitoring Tab and show the effect of `stress tool` on CPU Utilization
+
+- Show newly created instance based on `add-policy`
+
+- Go to instance terminal and stop `stress tool` with `CTRL-C`
+
+- Show the removed instance after `stress tool` stops based on `remove-policy`
+
+- Delete the Simple Policies
+
+Step 4: Add Step Scaling Policy
+
+- Go to `Auto Scaling Groups` --> click `First-AS-Group` --> `Automatic Scaling` --> `Add Policy`
+
+
+  1. Create `Add-Policy`;
+
+- Select `Step Scaling` as Policy Type
+
+- Name :
+```text
+Step Policy Name : First Step Policy-Add
+```
+
+- Select `Auto Scaling-Add` as Cloudwatch Alarm
+
+- Take the Action : 
+
+```text
+Add --- 1 ---- Capacity Unit ----when 60---    <=    CPUUtilization 90
+
+
+Clic "Add step"
+
+Add ----2 -----Capacity Unit ----when 90 ----  <= Infinity
+
+An Then wait   : 200
+```
+
+  2. Create `Remove-Policy`;
+
+- Name :
+```text
+Step Policy Name : First Step Policy-Add
+```
+
+- Select `Step Scaling` as Policy Type
+
+- Select `Auto Scaling-Remove` as Cloudwatch Alarm
+
+- Take the Action :
+
+```text
+Remove --- 1 ---- Capacity Unit
+An Then wait   : 200
+```
+
+- Use the stress tool on EC2 Instances
+
+- Stop the stress tool with CTRL + C
+
+- Delete the Step Polices
+
+- Step 5: Show target Tracing Policy
+
+- Go to `Auto Scaling Groups` --> click `First-AS-Group` --> `Automatic Scaling` --> `Add Policy`
+
+
+- Click `Add-Policy`;
+
+
+```text
+Policy Type         : Target Tracking Policy
+Scaling Policy Name : First Target Tracking
+Target value        : 60
+Instances need      : 200 sec
+```
+Use the stress tool on EC2 Instances
+
+- Stop the stress tool with CTRL + C
+
+- Delete the Target Tracking  Policy
+
+- Delete Auto-scaling group and Load Balancer
+
