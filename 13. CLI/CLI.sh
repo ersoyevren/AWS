@@ -2,7 +2,7 @@
 
 # References
 # https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-welcome.html
-# https://awscli.amazonaws.com/v2/documentation/api/latest/index.html
+# https://awscli.amazonaws.com/v2/documentation/api/latest/index.html  # kullanacagimiz komutlari nasil kullanabiliriz.
 # https://aws.amazon.com/blogs/compute/query-for-the-latest-amazon-linux-ami-ids-using-aws-systems-manager-parameter-store/
 
 
@@ -38,15 +38,15 @@ cat .aws/credentials
 
 aws configure --profile user1
 
-export AWS_PROFILE=user1
-export AWS_PROFILE=default
+export AWS_PROFILE=user1  # burada defaultu degistirip user1 yapiyoruz.
+export AWS_PROFILE=default # tekrar default kullanicisina geri donuyoruz.
 
-aws configure list-profiles
+aws configure list-profiles # yuklu profilleri gorebiliyoruz.
 
-aws sts get-caller-identity
+aws sts get-caller-identity # komut arayuzu araciligiyla cagrilari hangi account yapti onu gorebiliyoruz.
 
 # IAM
-aws iam list-users
+aws iam list-users # iam daki user larimi listeliyor.
 
 aws iam create-user --user-name aws-cli-user #kullanici olusturuyor.
 
@@ -79,7 +79,7 @@ aws ec2 run-instances \   # bir tane ec2 ayaga kaldiriyor
 aws ec2 describe-instances \  # filtreleme yapiyorum
    --filters "Name = key-name, Values = KEY_NAME_HERE" # put your key name
 
-aws ec2 describe-instances --query "Reservations[].Instances[].PublicIpAddress[]" #cikti kisminda public olan instance larimi veriyor.
+aws ec2 describe-instances --query "Reservations[].Instances[].PublicIpAddress[]" #cikti kisminda instance larimin ip adresini veriyor.
 
 aws ec2 describe-instances \
    --filters "Name = key-name, Values = KEY_NAME_HERE" --query "Reservations[].Instances[].PublicIpAddress[]" # put your key name
@@ -107,6 +107,8 @@ aws ec2 run-instances \
 
 # Remove AWS CLI Version 1
 sudo yum remove awscli -y # pip uninstall awscli/pip3 uninstall awscli might also work depending on the image
+# version 2 yi yuklemek icin vesion 1 i yukaridaki kmoutla kaldiriyoruz.
+
 
 # Install AWS CLI Version 2
 curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
