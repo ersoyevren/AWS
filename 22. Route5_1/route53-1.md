@@ -335,3 +335,30 @@ Value/Route traffic to:
 - Check from local terminal
 nslookup www.[your DNS name].net an show two IP address 
 
+## Part 4 - Creating a CNAME Record:
+
+- Add CNAME record for "Domain Name" 
+
+- click your Domain name's public hosted zone
+
+- click "create record"
+
+- select "simple routing" ---> Next
+
+- click "Define simple record"
+
+```bash
+Record Name:"showcname"
+Value/Route traffic to: 
+  - "IP address or another value depending on the record type"
+    - enter "www.[your DNS name].net"
+Record Type : "CNAME"-Routes to another domain and some AWS resources
+TTL:"1m"
+```
+- hit the define simple record
+
+- Select newly created record's flag and hit the "create record" 
+tab seen bottom
+
+- After show "showcname.[your DNS name].net" on the browser. It will reflects the "www.[your DNS name].net". After that "Delete"  this record 
+
